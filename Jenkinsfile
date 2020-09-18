@@ -4,6 +4,6 @@ node {
   }
 
   stage('git clone') {
-    git clone "https://github.com/Paulophmp/laravel_with_jenkins"
+    git clone "ssh://git@mywebsite.com/myrepo.git"
   }
 }
