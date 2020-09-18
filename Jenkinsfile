@@ -29,19 +29,8 @@ pipeline {
             }
         }
     }
-    pipeline {
-        agent any
-        stages {
-            stage('Send Email') {
-                steps {
-                node ('master'){
-                    echo 'Send Email'
-                }
-            }
-            }
-        }
-        post { 
-            always { 
+        post {
+            always {
                 echo 'I will always say Hello!'
             }
             aborted {
