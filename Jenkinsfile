@@ -1,13 +1,10 @@
-node{
-   stage('SCM Checkout'){
-     git 'https://github.com/Paulophmp/laravel_with_jenkins'
-   }
+node {
 
-   stage('Email Notification'){
-      mail bcc: '', body: '''Hi Welcome to jenkins email alerts
-      Thanks
-      Hari''', cc: '', from: '', replyTo: '', subject: 'Jenkins Job', to: 'paulo.mendes00@hotmail.com'
-   }
+  stage ('Build') {
+    git url: 'https://github.com/Paulophmp/laravel_with_jenkins'
+
+  }
+
 }
 
 
