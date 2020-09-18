@@ -1,32 +1,9 @@
-pipeline {
-    agent any
-
-    stages {
-        stage ('Compile Stage') {
-
-            steps {
-                withMaven(maven : 'M3') {
-                    sh 'mvn clean compile'
-                }
-            }
-        }
-
-        stage ('Testing Stage') {
-
-            steps {
-                withMaven(maven : 'M3') {
-                    sh 'mvn test'
-                }
-            }
-        }
-
-
-        stage ('Deployment Stage') {
-            steps {
-                withMaven(maven : 'M3') {
-                    sh 'mvn deploy'
-                }
-            }
-        }
-    }
+node {
+  stage ('Build') {
+    git url: 'https://github.com/Paulophmp/laravel_with_jenkins'
+      
+    withMaven {
+      sh "mvn clean verify"
+    } // withMaven will discover the generated Maven artifacts, JUnit Surefire & FailSafe reports and FindBugs reports
+  }
 }
