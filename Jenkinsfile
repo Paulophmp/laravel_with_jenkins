@@ -29,18 +29,4 @@ pipeline {
             }
         }
     }
-        post {
-            always {
-                echo 'I will always say Hello!'
-            }
-            aborted {
-                echo 'I was aborted'
-            }
-            failure {
-                mail to: 'paulo.mendes00@hotmail.com',
-                subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
-                body: "Something is wrong with ${env.BUILD_URL}"
-            }
-        }
-    }
 }
