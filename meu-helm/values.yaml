@@ -1,0 +1,21 @@
+image:
+  repository: "paulinho/laravel-kubernetes"
+  tag: "latest"
+  fpmEnabled: false
+  envVars:
+    - name: APP_ENV
+      value: production
+    - name: APP_DEBUG
+      value: false
+    - name: DB_PORT
+      value: 3306
+    - name: DB_HOST
+      value: localhost
+# Use Ingress Controller
+service:
+  type: NodePort
+  port: 80
+ingress:
+  enabled: true
+  domain: meuteste
+
