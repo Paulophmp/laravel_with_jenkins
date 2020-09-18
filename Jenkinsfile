@@ -1,17 +1,32 @@
-node{
-   stage('SCM Checkout'){
-     git 'https://github.com/Paulophmp/laravel_with_jenkins'
-   }
-   
-   stage('Compile-Package'){
-      // Get maven home path
-      def mvnHome =  tool name: 'M3', type: 'maven'
-      sh "${mvnHome}/bin/mvn package"
-   }
-   
-   stage('Email Notification'){
-      mail bcc: '', body: '''Hi Welcome to jenkins email alerts
-      Thanks
-      Hari''', cc: '', from: '', replyTo: '', subject: 'Jenkins Job', to: 'paulo.mendes00@hotmail.com'
-   }
+pipeline {
+    agent any
+
+    stages {
+        stage ('Compile Stage') {
+
+            steps {
+                withMaven(maven : 'M3') {
+                    sh 'mvn clean compile'
+                }
+            }
+        }
+
+        stage ('Testing Stage') {
+
+            steps {
+                withMaven(maven : 'M3') {
+                    sh 'mvn test'
+                }
+            }
+        }
+
+
+        stage ('Deployment Stage') {
+            steps {
+                withMaven(maven : 'M3') {
+                    sh 'mvn deploy'
+                }
+            }
+        }
+    }
 }
