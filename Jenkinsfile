@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('checkout') {
             steps {
-                checkout([$class: 'GitSCM', branches: [[name: 'origin']],
+                checkout([$class: 'GitSCM', branches: [[name: '*/master']],
                           userRemoteConfigs: [[url: 'ssh://git@github.com:Paulophmp/laravel_with_jenkins.git',
                                                credentialsId: 'dockerhub']]
                         ])
