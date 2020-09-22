@@ -1,14 +1,37 @@
-node ('Build'){
-  stage 'sanity check'
-  sh 'echo sanity check'
-  stage 'checkout other repository'
-  checkout([
-    $class: 'GitSCM', branches: [[name: '*/master']],
-    userRemoteConfigs: [[url: 'https://github.com/Paulophmp/laravel_with_jenkins.git', credentialsId: 'dockerhub']]
-  ])
-  stage 'log results'
-  sh 'echo result = OK'
- }
+
+ stage('Checkout') {
+    checkout([$class: 'GitSCM',
+              userRemoteConfigs: [[url: 'ssh://git@github.com:Paulophmp/laravel_with_jenkins.git',
+                                   credentialsId: 'dockerhub',
+                                   name: 'origin',
+                                   refspec: "+refs/heads/${branch}:refs/remotes/origin/${branch}",
+                                  ]],
+              branches: [[name: "*/${branch}"]],
+              browser: [$class: 'GithubWeb',
+                        repoUrl: 'https://github.com/Paulophmp/laravel_with_jenkins'],
+              extensions: [[$class: 'AuthorInChangelog'],
+                           [$class: 'CheckoutOption', timeout: 1],
+                           [$class: 'CleanCheckout'],
+                           [$class: 'CloneOption',
+                            depth: 3,
+                            honorRefspec: true,
+                            noTags: true,
+                            reference: '/var/lib/git/mwaite/bugs/jenkins-bugs-private.git',
+                            shallow: true,
+                            timeout: 3],
+                           [$class: 'LocalBranch', localBranch: '**'],
+                           [$class: 'PruneStaleBranch'],
+                           [$class: 'SubmoduleOption',
+                            disableSubmodules: false,
+                            parentCredentials: true,
+                            recursiveSubmodules: true,
+                            reference: '/var/lib/git/mwaite/bin.git',
+                            trackingSubmodules: false],
+                           [$class: 'WipeWorkspace'],
+                           ],
+              gitTool: "Default", // JGit does not support submodules
+             ])
+  }
 
 
 
