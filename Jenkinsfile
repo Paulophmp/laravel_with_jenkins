@@ -8,8 +8,12 @@ pipeline {
   stages {
     stage('Cloning Git') {
       steps {
-        git 'https://github.com/Paulophmp/laravel_with_jenkins.git'
-      }
+          checkout([$class: 'GitSCM', branches: [[name: '*/master']],
+                userRemoteConfigs: [[url: 'ssh://git@github.com:Paulophmp/laravel_with_jenkins.git',
+                         credentialsId: 'dockerhub']]
+                ])
+          }
+        }
     }
     stage('Building image') {
       steps{
