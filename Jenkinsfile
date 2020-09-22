@@ -1,19 +1,39 @@
 pipeline {
-    agent any
-    stages {
-        stage('checkout') {
-            steps {
-                checkout([$class: 'GitSCM', branches: [[name: '*/master']],
-                          userRemoteConfigs: [[url: 'ssh://git@github.com:Paulophmp/laravel_with_jenkins.git',
-                                               credentialsId: 'dockerhub']]
-                        ])
-                }
-            }
+  environment {
+    registry = "paulinho/laravel-kubernetes"
+    registryCredential = 'dockerhub'
+    dockerImage = ''
+  }
+  agent any
+  stages {
+    stage('Cloning Git') {
+      steps {
+        git 'https://github.com/Paulophmp/laravel_with_jenkins.git'
+      }
     }
+    stage('Building image') {
+      steps{
+        script {
+          dockerImage = docker.build registry + ":$BUILD_NUMBER"
+        }
+      }
+    }
+    stage('Deploy Image') {
+      steps{
+        script {
+          docker.withRegistry( '', registryCredential ) {
+            dockerImage.push()
+          }
+        }
+      }
+    }
+    stage('Remove Unused docker image') {
+      steps{
+        sh "docker rmi $registry:$BUILD_NUMBER"
+      }
+    }
+  }
 }
-
-
-
 
 
 
